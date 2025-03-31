@@ -8,7 +8,8 @@ import { Pressable, Text, TextInput, TouchableOpacity, View } from "react-native
 import ActionSheet from "../action-sheet"
 import Label from "../label"
 
-export interface IProps<T> {
+
+export interface IProps<T extends { name: string }>{
   options: T[]
   name: string
   title: string
@@ -20,7 +21,7 @@ export interface IProps<T> {
   valid?: boolean
 }
 
-const SelectOption = <T,> ({
+const SelectOption = <T extends { name: string }> ({
   placeholder,
   label,
   title,
@@ -32,6 +33,8 @@ const SelectOption = <T,> ({
   ...rest
 }: IProps<T>) => {
   const bottomSheetRef = useRef<BottomSheetModal>(null)
+
+  console.log("option",options)
   const openMenu = () => {
     bottomSheetRef.current?.present()
   }
@@ -79,10 +82,10 @@ const SelectOption = <T,> ({
                   <TouchableOpacity
                     className=""
                     onPress={() => {
-                      field.onChange(item) 
+                      field.onChange(item.name)
                       handleCancel()
                     }}>
-                    <Text className={cn(" text-center py-2")}>{String(item)}</Text>
+                    <Text className={cn(" text-center py-2")}>{item?.name}</Text>
                   </TouchableOpacity>
                 )
               }}

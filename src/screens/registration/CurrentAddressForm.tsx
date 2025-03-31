@@ -1,4 +1,3 @@
-import SelectOption from "@/components/select-option"
 import TextField from "@/components/text-field"
 import NextBtn from "@assets/icons/arrowRightBtn.svg"
 import Info from "@assets/icons/information.svg"
@@ -12,9 +11,7 @@ interface IProps {
     prevStep: () => void
 }
   
-  
 const CurrentAddressForm = ({ nextStep, prevStep }: IProps) => {
-  const options = ["Option1","Option2"]
   return (
     <View>
       <FormProgress 
@@ -33,20 +30,20 @@ const CurrentAddressForm = ({ nextStep, prevStep }: IProps) => {
             <Text className="text-[16px] font-semibold">Current Address</Text>
           </View>
         
-          <View className="">
-            <SelectOption options={options} title="Select Country" labelClassName="text-gray-dark-color" name="country" placeholder="Select Country"/>
+          <View className="mt-5">
+            <TextField labelClassName="text-gray-dark-color" name="country" value="Belgium" editable={false} placeholder="Country" />
           </View>
-          <View className="">
-            <SelectOption options={options} title="Select State/Province/Region" labelClassName="text-gray-dark-color" name="state" placeholder="Select State/Province/Region"/>
+          <View className="mt-5">
+            <TextField labelClassName="text-gray-dark-color" name="state" placeholder="Enter State/Province/Region"/>
           </View>
-          <View className="">
-            <SelectOption options={options} title="Select City" labelClassName="text-gray-dark-color" name="city" placeholder="Select City"/>
+          <View className="mt-5">
+            <TextField labelClassName="text-gray-dark-color" name="city" placeholder="Enter City"/>
           </View>
           <View className=" mt-5">
             <TextField labelClassName="text-gray-dark-color" name="street" placeholder="Enter Street Address"/>
           </View>
           <View className=" mt-5">
-            <TextField labelClassName="text-gray-dark-color" name="zip" placeholder="Enter ZIP/Postal Code"/>
+            <TextField labelClassName="text-gray-dark-color" name="postalcode" placeholder="Enter ZIP/Postal Code"/>
           </View>
         </View>
       </ScrollView> 

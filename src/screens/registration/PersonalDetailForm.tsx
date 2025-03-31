@@ -72,7 +72,6 @@ const PersonalDetailForm = ({ nextStep }: IProps) => {
   // }
 
   const combinedData = [...pickedDocument]
-  console.log("combined",combinedData)
   console.log("removedFiles",removedFiles)
   return (
     <View className=" flex-1">
@@ -104,7 +103,7 @@ const PersonalDetailForm = ({ nextStep }: IProps) => {
             <TextField labelClassName="text-gray-dark-color" name="profession" placeholder="Enter Profession"/>
           </View>
           <View className=" mt-5">
-            <TextField labelClassName="text-gray-dark-color" name="contect" placeholder="Enter Contact Number" keyboardType="number-pad"/>
+            <TextField labelClassName="text-gray-dark-color" name="contact" placeholder="Enter Contact Number" keyboardType="number-pad"/>
           </View>
           <View className=" mt-5">
             <TextField labelClassName="text-gray-dark-color" name="email" placeholder="Enter Email Address" />
@@ -125,7 +124,7 @@ const PersonalDetailForm = ({ nextStep }: IProps) => {
               <View>
                 <View className="flex-row items-center h-20 mt-5 ">
                   <DocumentAttachment
-                    name="file"
+                    name="photo"
                     pickedDocument={pickedDocument}
                     modalVisible={modalVisible}
                     selectedImage={selectedImage}
@@ -176,7 +175,6 @@ const PersonalDetailForm = ({ nextStep }: IProps) => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-     
     </View>
   )
 }
