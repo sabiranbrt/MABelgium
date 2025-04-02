@@ -73,7 +73,7 @@ const TextField = ({
               </View>
             </View>
             {errors[name] ? (
-              <Text className="text-secondary-error-message">
+              <Text className="text-error">
                 {errors[name]?.message as string}
               </Text>
             ) : null}

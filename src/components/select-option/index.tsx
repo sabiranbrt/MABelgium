@@ -8,8 +8,7 @@ import { Pressable, Text, TextInput, TouchableOpacity, View } from "react-native
 import ActionSheet from "../action-sheet"
 import Label from "../label"
 
-
-export interface IProps<T extends { name: string }>{
+export interface IProps<T extends { id: number; name: string }>{
   options: T[]
   name: string
   title: string
@@ -19,22 +18,25 @@ export interface IProps<T extends { name: string }>{
   className?: string
   labelClassName?: string
   valid?: boolean
+  onClick?: (selectedItem: number) => void
 }
 
-const SelectOption = <T extends { name: string }> ({
-  placeholder,
-  label,
-  title,
-  className,
-  rules,
-  name,
-  labelClassName,
-  options,
-  ...rest
-}: IProps<T>) => {
+const SelectOption = <T extends {
+  id: number; name: string 
+}> ({
+    placeholder,
+    label,
+    title,
+    className,
+    rules,
+    name,
+    labelClassName,
+    onClick,
+    options,
+    ...rest
+  }: IProps<T>) => {
   const bottomSheetRef = useRef<BottomSheetModal>(null)
 
-  console.log("option",options)
   const openMenu = () => {
     bottomSheetRef.current?.present()
   }
@@ -74,7 +76,7 @@ const SelectOption = <T extends { name: string }> ({
               </View>
             </Pressable>
             {errors[name] ? (
-              <Text className="text-secondary-error-message">{errors[name]?.message as string}</Text>
+              <Text className="text-error">{errors[name]?.message as string}</Text>
             ) : null}
             <ActionSheet title={title} ref={bottomSheetRef} handleCancel={handleCancel}>
               <BottomSheetFlatList data={options} renderItem={({ item }) => {
@@ -83,6 +85,7 @@ const SelectOption = <T extends { name: string }> ({
                     className=""
                     onPress={() => {
                       field.onChange(item.name)
+                      onClick?.(item.id)
                       handleCancel()
                     }}>
                     <Text className={cn(" text-center py-2")}>{item?.name}</Text>

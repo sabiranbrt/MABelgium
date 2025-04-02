@@ -20,3 +20,14 @@ export const getMunicipality = (districtID: number) => {
     method: "GET",
   })
 }
+
+export const getSave = (body: FormData) => {
+  return request<TODO>({
+    url: "/save",
+    method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data: body
+  })
+}

@@ -1,23 +1,28 @@
-
 import { cn } from "@/utils/tailwindMerge"
 import Calender from "@assets/icons/calender.svg"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
-import React, { useRef } from "react"
+import React, { useRef, useState } from "react"
 import { Controller, useFormContext } from "react-hook-form"
-import { Pressable, Text, TextInput, View } from "react-native"
+import { Pressable, Text, TextInput, TouchableOpacity, View } from "react-native"
 import { Calendar } from "react-native-calendars"
 import ActionSheet from "../action-sheet"
 import Label from "../label"
+import { ScrollView } from "react-native-gesture-handler"
 
 export interface IProps {
-  name: string
-  placeholder?: string
-  rules?: TODO
-  label?: string
-  className?: string
-  labelClassName?: string
-  valid?: boolean
+  name: string;
+  placeholder?: string;
+  rules?: TODO;
+  label?: string;
+  className?: string;
+  labelClassName?: string;
+  valid?: boolean;
 }
+
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+]
 
 const DatePicker = ({
   placeholder,
@@ -28,17 +33,42 @@ const DatePicker = ({
   labelClassName,
   ...rest
 }: IProps) => {
-  const bottomSheetRef = useRef<BottomSheetModal>(null)
-  const openMenu = () => {
-    bottomSheetRef.current?.present()
+  const calenderSheetRef = useRef<BottomSheetModal>(null)
+  const monthPickerSheetRef = useRef<BottomSheetModal>(null)
+  const yearPickerSheetRef = useRef<BottomSheetModal>(null)
+
+  const openMenu = () => calenderSheetRef.current?.present()
+  const handleCancel = () => calenderSheetRef.current?.dismiss()
+
+  // Open month picker sheet
+  const openMonthPicker = () => {
+    monthPickerSheetRef.current?.present()
   }
-  const handleCancel = () => {
-    bottomSheetRef.current?.dismiss()
+
+  // Open year picker sheet
+  const openYearPicker = () => {
+    yearPickerSheetRef.current?.present()
   }
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext()
+  
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth())
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
+  
+  const [years] = useState(() => {
+    const startYear = 1980
+    const endYear = 2045
+    return Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i)
+  })
+
+  const { control, formState: { errors } } = useFormContext()
+
+  const handleMonthChange = (month: number) => {
+    setCurrentMonth(month -1)
+    monthPickerSheetRef.current?.dismiss()
+  }
+  const handleYearChange = (year: number) => {
+    setCurrentYear(year)
+    yearPickerSheetRef.current?.dismiss()
+  }
 
   return (
     <Controller
@@ -49,8 +79,9 @@ const DatePicker = ({
       render={({ field }) => {
         return (
           <View className={cn(className)}>
-            {label ?
-              <Label classname={labelClassName} title={label} valid={rules ? "*" : undefined} /> : null}
+            {label && (
+              <Label classname={labelClassName} title={label} valid={rules ? "*" : undefined} />
+            )}
             <Pressable onPress={openMenu}>
               <View className="relative">
                 <TextInput
@@ -59,6 +90,7 @@ const DatePicker = ({
                   pointerEvents="none"
                   id={name}
                   placeholder={placeholder}
+                  value={field.value ? new Date(field.value).toLocaleDateString() : ""}
                   className={cn("text-fs-[14px] p-3 border-[1px] border-primary-light rounded-md text-black")}
                 />
                 <View className="absolute top-3 right-2">
@@ -68,23 +100,87 @@ const DatePicker = ({
                 </View>
               </View>
             </Pressable>
-            {errors[name] ? (
-              <Text className="text-secondary-error-message">{errors[name]?.message as string}</Text>
-            ) : null}
-            <ActionSheet title="Choose Date" snapPoints={["60%"]} ref={bottomSheetRef} handleCancel={handleCancel}>
-              <View className="">
+            {errors[name] && (
+              <Text className="text-error">{errors[name]?.message as string}</Text>
+            )}
+            <ActionSheet
+              title="Choose Date"
+              snapPoints={["60%"]}
+              ref={calenderSheetRef}
+              handleCancel={handleCancel}
+            >
+              <View>
                 <Calendar
-                  current={field.value}
-                  onDayPress={(value) => {
-                    field.onChange(value?.dateString)
+                  enableSwipeMonths={true}
+                  current={`${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-01`}
+                  renderHeader={() => {
+                    return (
+                      <View className=" flex-row items-center gap-x-5">
+                        <Pressable
+                          onPress={() => openMonthPicker()}
+                          className=""
+                        >
+                          <Text className="text-lg font-bold">
+                            {months[currentMonth]}
+                          </Text>
+                        </Pressable>
+                        <Pressable
+                          onPress={() => openYearPicker()}
+                          className=""
+                        >
+                          <Text className="text-lg font-bold">
+                            {currentYear}
+                          </Text>
+                        </Pressable>
+                      </View>
+                      
+                    )
+                  }
+                  }
+                  onDayPress={(day) => {
+                    setCurrentMonth(day.month)
+                    setCurrentYear(day.year)
+                    field.onChange(day.dateString)
                     handleCancel()
                   }}
                 />
               </View>
             </ActionSheet>
+
+            {/* Month/Year Picker Modal */}
+            <ActionSheet snapPoints={["60%"]} ref={monthPickerSheetRef} title="Select Month">
+              <View className="">
+                <ScrollView className="" showsVerticalScrollIndicator={false}>
+                  {months.map((month, index) => (
+                    <TouchableOpacity
+                      key={month}
+                      onPress={() => handleMonthChange(index + 1)}
+                      className={`py-2 px-3 items-center ${currentMonth === index ? "bg-primary-light" : ""}`}
+                    >
+                      <Text>{month}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+          
+            </ActionSheet>
+            <ActionSheet snapPoints={["60%"]} ref={yearPickerSheetRef} title="Select Year">
+              <View className="">
+                <ScrollView className="" showsVerticalScrollIndicator={false}>
+                  {years.map((year) => (
+                    <TouchableOpacity
+                      key={year}
+                      onPress={() => handleYearChange(year)}
+                      className={`py-2 px-3 items-center ${currentYear === year ? "bg-primary-light" : ""}`}
+                    >
+                      <Text>{year}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </ActionSheet>
           </View>
         )
-        
       }}
     />
   )

@@ -10,6 +10,7 @@ module.exports = {
       },
       white: "#fff",
       black: "#000",
+      error: "#7D0A0A",
       gray: {
         DEFAULT: "#808080",
         "dark-color": "#4f545c",

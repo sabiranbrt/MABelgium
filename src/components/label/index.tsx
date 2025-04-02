@@ -11,10 +11,12 @@ type LabelValidation = {
 const Label = ({ title, valid,classname }: LabelValidation) => {
   return (
     <View>
-      <Text className={cn("text-fs-label font-fw-lg mb-[2px]",classname)}>
-        {title}
-        <Text className="text-secondary-error-message">{valid}</Text>
-      </Text>
+      {title && (
+        <Text className={cn("text-fs-label font-fw-lg mb-[2px]", classname)}>
+          {title}
+          {valid && <Text className="text-error">{valid}</Text>}
+        </Text>
+      )}
     </View>
   )
 }

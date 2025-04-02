@@ -1,4 +1,4 @@
-import { getDistrict, getMunicipality, getProvince } from "@/services"
+import { getDistrict, getMunicipality, getProvince, getSave } from "@/services"
 import { useEffect, useState } from "react"
 
 export const useProvinceList = () => {
@@ -53,7 +53,7 @@ export const useDistrictList = (provinceID?: number) => {
   return { data, loading, refetch: fetchDistrict }
 }
 
-export const useMunicipalityList = (districtID?: number) => {
+export const useMunicipalityList = (districtID? : number) => {
   const [data, setData] = useState<TODO>(null)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -76,4 +76,29 @@ export const useMunicipalityList = (districtID?: number) => {
   }, [districtID]) // Refetch when districtID changes
 
   return { data, loading, refetch: fetchMunicipality }
+}
+
+export const useSaveData = () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
+  const [isSuccess, setIsSuccess] = useState(false)
+
+  const saveData = async (data: FormData) => {
+    try {
+      setIsLoading(true)
+      setIsSuccess(false)
+      setError(null)
+      
+      await getSave(data)
+      
+      setIsSuccess(true)
+    } catch (err) {
+      setError(err as Error)
+      setIsSuccess(false)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  return { saveData, isLoading, error, isSuccess }
 }
