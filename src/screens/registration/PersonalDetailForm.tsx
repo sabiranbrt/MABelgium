@@ -62,7 +62,6 @@ const PersonalDetailForm = ({ nextStep }: IProps) => {
     }))
   }
 
-
   return (
     <View className=" flex-1">
       <FormProgress 
