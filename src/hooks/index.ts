@@ -88,11 +88,15 @@ export const useSaveData = () => {
       setIsLoading(true)
       setIsSuccess(false)
       setError(null)
-      
-      await getSave(data)
+
+      console.log("Saving data:", data) // Log the request data
+
+      const response = await getSave(data)
+      console.log("Save successful:", response) // Log the response
       
       setIsSuccess(true)
     } catch (err) {
+      console.error("Save failed:", err) // Log the error
       setError(err as Error)
       setIsSuccess(false)
     } finally {

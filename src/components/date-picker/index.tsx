@@ -8,6 +8,7 @@ import { Calendar } from "react-native-calendars"
 import ActionSheet from "../action-sheet"
 import Label from "../label"
 import { ScrollView } from "react-native-gesture-handler"
+import SelectArrow from "@assets/icons/selectArrow.svg"
 
 export interface IProps {
   name: string;
@@ -70,6 +71,7 @@ const DatePicker = ({
     yearPickerSheetRef.current?.dismiss()
   }
 
+  const currentDate = `${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-01`
   return (
     <Controller
       control={control}
@@ -111,36 +113,45 @@ const DatePicker = ({
             >
               <View>
                 <Calendar
-                  enableSwipeMonths={true}
+                  key={currentDate}
+                  enableSwipeMonths={false}
+                  hideArrows
+                  theme={{
+                    todayBackgroundColor: "#185CAB",
+                    todayTextColor: "#fff",
+                    textSectionTitleColor: "#000",
+                    selectedDayBackgroundColor:"#000"
+                  }}
+                  
                   current={`${currentYear}-${String(currentMonth + 1).padStart(2, "0")}-01`}
                   renderHeader={() => {
                     return (
-                      <View className=" flex-row items-center gap-x-5">
+                      <View className=" flex-row items-center justify-start gap-x-5 mb-4 w-full">
                         <Pressable
-                          onPress={() => openMonthPicker()}
-                          className=""
+                          onPress={openMonthPicker}
+                          className="flex-row items-center gap-x-1"
                         >
-                          <Text className="text-lg font-bold">
+                          <Text className="text-lg font-bold text-primary">
                             {months[currentMonth]}
                           </Text>
+                          <SelectArrow width={16} height={16} />
                         </Pressable>
                         <Pressable
-                          onPress={() => openYearPicker()}
-                          className=""
+                          onPress={openYearPicker}
+                          className="flex-row items-center gap-x-1"
                         >
-                          <Text className="text-lg font-bold">
+                          <Text className="text-lg font-bold text-primary">
                             {currentYear}
                           </Text>
+                          <SelectArrow width={16} height={16} />
                         </Pressable>
                       </View>
-                      
                     )
                   }
                   }
                   onDayPress={(day) => {
-                    setCurrentMonth(day.month)
-                    setCurrentYear(day.year)
                     field.onChange(day.dateString)
+                    console.log("day",day)
                     handleCancel()
                   }}
                 />

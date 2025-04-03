@@ -9,10 +9,10 @@ import FormProgress from "./components/FormProgress"
 
 interface IProp {
   prevStep: () => void
+  onSubmit: () => void
   }
 
-const NepalAddressForm = ({ prevStep }: IProp) => {
-
+const NepalAddressForm = ({ prevStep,onSubmit }: IProp) => {
 
   const { data: provinceList } = useProvinceList()
   const ProvienceList = provinceList?.province
@@ -67,7 +67,7 @@ const NepalAddressForm = ({ prevStep }: IProp) => {
             <Text className=" text-white text-[14px] font-semibold">Prev</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity className="" onPress={()=> {}}>
+        <TouchableOpacity className="" onPress={onSubmit}>
           <View className=" flex-row items-center justify-center bg-primary p-3 rounded-md">
             <Text className=" text-white text-[14px] font-semibold">Submit Now</Text>
           </View>

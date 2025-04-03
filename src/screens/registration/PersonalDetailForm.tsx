@@ -82,6 +82,12 @@ const PersonalDetailForm = ({ nextStep }: IProps) => {
             <TextField labelClassName="text-gray-dark-color" name="fullname" placeholder="Enter Full Name" rules={{required:"full name required*"}}/>
           </View>
           <View className=" mt-5">
+            <TextField labelClassName="text-gray-dark-color" name="father_name" placeholder="Enter Father Name" rules={{required:"father name required*"}}/>
+          </View>
+          <View className=" mt-5">
+            <TextField labelClassName="text-gray-dark-color" name="mother_name" placeholder="Enter Mother Name" rules={{required:"Mother name required*"}}/>
+          </View>
+          <View className=" mt-5">
             <DatePicker labelClassName="text-gray-dark-color" name="dob"  placeholder="Select Date of Birth" rules={{required:"date required*"}}/>
           </View>
           <View className=" mt-5">
@@ -98,7 +104,7 @@ const PersonalDetailForm = ({ nextStep }: IProps) => {
           </View>
           {/* Profile Photo Upload */}
           <View className="mt-5">
-            <Text className="text-label font-fw-lg">Upload photo</Text>
+            <Text className="text-label font-fw-lg mb-2">Upload photo</Text>
             {!documents.photo ? (
               <TouchableOpacity
                 className="items-center"
@@ -120,53 +126,56 @@ const PersonalDetailForm = ({ nextStep }: IProps) => {
             )}
           </View>
 
-          {/* Front ID Card Upload */}
-          <View className="mt-5">
-            <Text className="text-label font-fw-lg">Front side of ID card</Text>
-            {!documents.frontId ? (
-              <TouchableOpacity
-                className="items-center"
-                onPress={() => handlePickDocument("frontId")}>
-                <Upload width={24} height={24} />
-                <Text className="mt-5 text-header-md font-fw-lg">
+          <View className=" flex-row justify-between mt-5">
+            {/* Front ID Card Upload */}
+            <View className="mt-5">
+              <Text className="text-label font-fw-lg mb-2">Front side of ID card</Text>
+              {!documents.frontId ? (
+                <TouchableOpacity
+                  className="items-center gap-y"
+                  onPress={() => handlePickDocument("frontId")}>
+                  <Upload width={24} height={24} />
+                  <Text className="mt-5 text-header-md font-fw-lg">
                   Tap to Upload Front ID
-                </Text>
-              </TouchableOpacity>
-            ) : (
-              <View className="flex-row items-center h-20 mt-5">
-                <DocumentAttachment
-                  rules={{required: "Front ID required*"}}
-                  name="frontId"
-                  pickedDocument={documents.frontId}
-                  removeDocument={() => removeDocument("frontId")}
-                />
-              </View>
-            )}
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <View className="flex-row items-center h-20 mt-5">
+                  <DocumentAttachment
+                    rules={{required: "Front ID required*"}}
+                    name="id_card_front"
+                    pickedDocument={documents.frontId}
+                    removeDocument={() => removeDocument("frontId")}
+                  />
+                </View>
+              )}
+            </View>
+
+            {/* Back ID Card Upload */}
+            <View className="mt-5">
+              <Text className="text-label font-fw-lg mb-2">Back side of ID card</Text>
+              {!documents.backId ? (
+                <TouchableOpacity
+                  className="items-center"
+                  onPress={() => handlePickDocument("backId")}>
+                  <Upload width={24} height={24} />
+                  <Text className="mt-5 text-header-md font-fw-lg">
+                  Tap to Upload Back ID
+                  </Text>
+                </TouchableOpacity>
+              ) : (
+                <View className="flex-row items-center h-20 mt-5">
+                  <DocumentAttachment
+                    rules={{required: "Back ID required*"}}
+                    name="id_card_back"
+                    pickedDocument={documents.backId}
+                    removeDocument={() => removeDocument("backId")}
+                  />
+                </View>
+              )}
+            </View>
           </View>
 
-          {/* Back ID Card Upload */}
-          <View className="mt-5">
-            <Text className="text-label font-fw-lg">Back side of ID card</Text>
-            {!documents.backId ? (
-              <TouchableOpacity
-                className="items-center"
-                onPress={() => handlePickDocument("backId")}>
-                <Upload width={24} height={24} />
-                <Text className="mt-5 text-header-md font-fw-lg">
-                  Tap to Upload Back ID
-                </Text>
-              </TouchableOpacity>
-            ) : (
-              <View className="flex-row items-center h-20 mt-5">
-                <DocumentAttachment
-                  rules={{required: "Back ID required*"}}
-                  name="backId"
-                  pickedDocument={documents.backId}
-                  removeDocument={() => removeDocument("backId")}
-                />
-              </View>
-            )}
-          </View>
           <View className=" mt-7">
             <BouncyCheckbox
               size={16}

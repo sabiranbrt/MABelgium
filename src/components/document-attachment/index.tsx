@@ -1,6 +1,6 @@
 import CrosssmallIcon from "@assets/icons/cross-small.svg"
 // import PdfImage from "@assets/images/pdflogo.png"
-import React from "react"
+import React, { useEffect } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 import { Image, Pressable, Text, View } from "react-native"
 
@@ -29,12 +29,20 @@ const DocumentAttachment = ({
         control={control}
         name={name}
         render={({ field }) => {
+          // Update the field value when pickedDocument changes
+          useEffect(() => {
+            if (pickedDocument !== field.value) {
+              field.onChange(pickedDocument)
+            }
+          }, [pickedDocument])
+          console.log("field", field)
           return (
             <View>
               <View>
                 <Pressable
                   onPress={() => {
                     removeDocument(pickedDocument)
+                    field.onChange(null)
                   }}
                 >
                   <View className=" relative mx-2">
@@ -48,7 +56,7 @@ const DocumentAttachment = ({
                         <View className="absolute top-0 h-full w-full bg-black opacity-25 rounded-circle-r z-40"></View>
                         <Image
                           className=" rounded-circle-r h-full w-full object-cover"
-                          source={{ uri: field.value }}
+                          source={{ uri: pickedDocument }}
                         />
                       </View>
                     </View>

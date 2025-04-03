@@ -10,10 +10,9 @@ import FormProgress from "./components/FormProgress"
 interface IProps {
   nextStep: () => void
   prevStep: () => void
-  onSubmit: () => void 
 }
 
-const CurrentAddressForm = ({ prevStep, onSubmit }: IProps) => {
+const CurrentAddressForm = ({ prevStep, nextStep }: IProps) => {
   return (
     <View>
       <FormProgress 
@@ -56,9 +55,9 @@ const CurrentAddressForm = ({ prevStep, onSubmit }: IProps) => {
             <Text className=" text-white text-[14px] font-semibold">Prev</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity className="" onPress={onSubmit}>
+        <TouchableOpacity className="" onPress={nextStep}>
           <View className=" flex-row items-center justify-center bg-primary p-3 rounded-md">
-            <Text className=" text-white text-[14px] font-semibold">Submit Now</Text>
+            <Text className=" text-white text-[14px] font-semibold">Next</Text>
             <NextBtn width={20} height={20} fill="white" />
           </View>
         </TouchableOpacity>
